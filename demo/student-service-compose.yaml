@@ -1,0 +1,25 @@
+#reference : https://bhavik.io/2017/12/19/consul-with-docker-swarm-mode.html
+---
+version: '3.3'
+networks:
+  overlay_net:
+    external: true
+services:
+  # Deploy the service instances
+  student:
+    image: edu.mum.ea/demo:1.0.0
+    networks:
+      overlay_net:
+        aliases:
+          - student.service
+    ports:
+      - "8098:8098"
+    deploy:
+      mode: global
+      restart_policy:
+        condition: any
+        delay: 5s
+        window: 120s
+      placement:
+        constraints:
+          - node.role == worker

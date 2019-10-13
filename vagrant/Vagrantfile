@@ -1,0 +1,33 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+
+  (1..6).each do |i|
+    config.vm.define "node-#{i}" do |node|
+      node.vm.box = "envimation/ubuntu-xenial-docker" 
+      # use custom key pair and append user public key to authorized
+      node.ssh.private_key_path = ["keys/id_rsa","~/.vagrant.d/insecure_private_key"]
+      node.ssh.insert_key = false
+      config.vm.provision "file", source: "keys/id_rsa.pub", destination: "~/.ssh/authorized_keys"
+     
+    node.vm.provider "virtualbox" do |v|
+      v.name = "node-#{i}"
+      v.memory = 1024
+      v.cpus = 1
+    end
+    node.vm.network "private_network", ip: "192.168.100.10#{i}" 
+    # node.vm.network "forwarded_port", guest: 22, host: "220#{i}"    
+  end
+end
+
+
+  
+ 
+ 
+
+end

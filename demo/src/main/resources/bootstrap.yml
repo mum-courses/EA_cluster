@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    consul:
+      host: consul.client
+      port: 8500
+      discovery:        
+        healthCheckUrl: http://student.service:${server.port}/ping
+        healthCheckInterval: 10s
+  application:
+    name: student-service
